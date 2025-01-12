@@ -97,6 +97,79 @@ impl<'infcx, 'tcx> crate::MirBorrowckCtxt<'_, 'infcx, 'tcx> {
         err
     }
 
+    // pub(crate) fn cannot_mutably_borrow_multiply(
+    //     &self,
+    //     new_loan_span: Span,
+    //     desc: &str,
+    //     opt_via: &str,
+    //     old_loan_span: Span,
+    //     old_opt_via: &str,
+    //     old_load_end_span: Option<Span>,
+    // ) -> Diag<'infcx> {
+    //     let via = |msg: &str| if msg.is_empty() { "".to_string() } else { format!(" (via {msg})") };
+    //     let mut err = struct_span_code_err!(
+    //         self.dcx(),
+    //         new_loan_span,
+    //         E0499,
+    //         "cannot borrow {}{} as mutable more than once at a time",
+    //         desc,
+    //         via(opt_via),
+    //     );
+    
+    //     // Check if we're in an `if let` pattern by examining the source
+    //     let is_if_let_pattern = self.infcx
+    //         .tcx
+    //         .sess
+    //         .source_map()
+    //         .span_to_snippet(new_loan_span)
+    //         .map(|snippet| snippet.contains("if let"))
+    //         .unwrap_or(false);
+    
+    //     if old_loan_span == new_loan_span && !is_if_let_pattern {
+    //         // Both borrows are happening in the same place and it's not an if-let pattern
+    //         // This indicates a loop
+    //         err.span_label(
+    //             new_loan_span,
+    //             format!(
+    //                 "{}{} was mutably borrowed here in the previous iteration of the loop{}",
+    //                 desc,
+    //                 via(opt_via),
+    //                 opt_via,
+    //             ),
+    //         );
+    //         if let Some(old_load_end_span) = old_load_end_span {
+    //             err.span_label(old_load_end_span, "mutable borrow ends here");
+    //         }
+    //     } else {
+    //         // Either different spans or it's an if-let pattern
+    //         if is_if_let_pattern {
+    //             err.span_label(
+    //                 new_loan_span,
+    //                 "multiple mutable borrows in an `if let` pattern",
+    //             );
+    //             if let Some(old_load_end_span) = old_load_end_span {
+    //                 err.span_label(
+    //                     old_load_end_span,
+    //                     format!("second mutable borrow occurs here{}", via(opt_via)),
+    //                 );
+    //             }
+    //         } else {
+    //             err.span_label(
+    //                 old_loan_span,
+    //                 format!("first mutable borrow occurs here{}", via(old_opt_via)),
+    //             );
+    //             err.span_label(
+    //                 new_loan_span,
+    //                 format!("second mutable borrow occurs here{}", via(opt_via)),
+    //             );
+    //             if let Some(old_load_end_span) = old_load_end_span {
+    //                 err.span_label(old_load_end_span, "first borrow ends here");
+    //             }
+    //         }
+    //     }
+    //     err
+    // }
+
     pub(crate) fn cannot_uniquely_borrow_by_two_closures(
         &self,
         new_loan_span: Span,
